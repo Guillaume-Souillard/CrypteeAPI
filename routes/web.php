@@ -33,9 +33,6 @@ Route::get('register', function() {
 //Requête pour le cronjob.
 Route::get('cronjobinit/{key}', 'Cronjob@initTable');
 
-//Requête pour le cronjob.
-Route::get('cronjobupdate', 'Cronjob@update');
-
 //Requête DATA
 Route::get('getalldata', 'getData@getAll');
 
