@@ -8,6 +8,12 @@ use function Psy\debug;
 
 class Cronjob extends Controller
 {
+
+    /**
+     * Init the table. Use in dev only.
+     * @param $key_pass
+     * @return void
+     */
     public function initTable($key_pass) {
 
         //verify the key_pass

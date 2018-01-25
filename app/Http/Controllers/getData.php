@@ -7,6 +7,11 @@ use Illuminate\Support\Facades\DB;
 
 class getData extends Controller
 {
+
+    /**
+     * Return in json all data about all coins
+     * @return object
+     */
     public function getAll() {
         $datas = DB::table('coins')->select(
             'name',
@@ -25,6 +30,11 @@ class getData extends Controller
         return $data;
     }
 
+    /**
+     * Return in json all data about one coin (set with coin symbol)
+     * @param $symbol
+     * @return object
+     */
     public function getDataCoin($symbol) {
         $datas = DB::table('coins')
             ->select(
