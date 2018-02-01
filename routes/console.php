@@ -35,6 +35,10 @@ function getData() {
     return $files;
 }
 
+/**
+ * php artisan initTable
+ * init coins table (only in dev or bug)
+ */
 Artisan::command('initTable', function() {
     //Get Data
     $files = getData();
@@ -58,4 +62,31 @@ Artisan::command('initTable', function() {
 
     }
     echo'All Is Good Created';
-})->describe('init coins table.');
+})->describe('Init coins table.');
+
+Artisan::command('updateAllCoins', function () {
+    //Get Data
+    $files = getData();
+
+    //Update coins
+    foreach ($files['result'] as $file) {
+
+        DB::table('coins')
+            ->where('rank', $file['rank'])
+            ->update(
+                [
+                    'name' => $file['name'],
+                    'symbol' => $file['symbol'],
+                    'rank' => $file['rank'],
+                    'img' => $file['img'],
+                    'percent_change_1h' => $file['percent_change_1h'],
+                    'percent_change_24h' => $file['percent_change_24h'],
+                    'percent_change_7d' => $file['percent_change_7d'],
+                    'cmc_price_btc' => $file['cmc_price_btc'],
+                    'cmc_price_usd' => $file['cmc_price_usd']
+                ]
+            );
+    }
+
+    echo'All Is Good Updated';
+})->describe('Update coins table');
