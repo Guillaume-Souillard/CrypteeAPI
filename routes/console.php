@@ -17,7 +17,7 @@ use Illuminate\Foundation\Inspiring;
  * Get all data about coins
  * @return array
  */
-function getData() {
+function getData($range) {
     // Create a stream
     $opts = array(
         'http'=>array(
@@ -29,9 +29,15 @@ function getData() {
     $context = stream_context_create($opts);
 
     // Open the file using the HTTP headers set above
-    $file = file_get_contents('https://cryptapi.com/v1/getdata?exchange=bittrex-poloniex-bitstamp-kraken-gdax&range=100', false, $context);
+    $file = file_get_contents("https://cryptapi.com/v1/getdata?exchange=bittrex-poloniex-bitstamp-kraken-gdax&range=$range", false, $context);
     $files = json_decode($file, true);
 
+    return $files;
+}
+
+function getChartData($coin) {
+    $file = file_get_contents("https://min-api.cryptocompare.com/data/histoday?fsym=$coin&tsym=USD&limit=365&aggregate=3&e=CCCAGG",false);
+    $files = json_decode($file, true);
     return $files;
 }
 
@@ -41,7 +47,7 @@ function getData() {
  */
 Artisan::command('initTable', function() {
     //Get Data
-    $files = getData();
+    $files = getData('100');
 
     //Adding coin
     foreach ($files['result'] as $file) {
@@ -64,13 +70,16 @@ Artisan::command('initTable', function() {
     echo'All Is Good Created';
 })->describe('Init coins table.');
 
+/**
+ * Update all coins
+ * @return void
+ */
 Artisan::command('updateAllCoins', function () {
     //Get Data
-    $files = getData();
+    $files = getData('100');
 
     //Update coins
     foreach ($files['result'] as $file) {
-
         DB::table('coins')
             ->where('rank', $file['rank'])
             ->update(
@@ -90,3 +99,31 @@ Artisan::command('updateAllCoins', function () {
 
     echo'All Is Good Updated';
 })->describe('Update coins table');
+
+/**
+ * update All Charts Daily
+ * @return void
+ */
+Artisan::command('updateChartsDaily', function () {
+
+    //Clear charts table
+    DB::statement('TRUNCATE `charts_data`');
+
+    $files = getData('150');
+    foreach ($files['result'] as $file) {
+        $chartDatas = getChartData($file['symbol']);
+        foreach ($chartDatas['Data'] as $data) {
+            if ($data['close'] != 0) {
+                DB::table('charts_data')->insert([
+                    [
+                        'rank' => $file['rank'],
+                        'symbol' => $file['symbol'],
+                        'time' => $data['time'],
+                        'price' => $data['close']
+                    ]
+                ]);
+            }
+        }
+    }
+    echo'All Charts Daily updated !';
+});
