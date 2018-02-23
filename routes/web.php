@@ -23,3 +23,6 @@ Route::get('getalldata', 'getData@getAll');
 
 //Requête One Coin
 Route::get('getdata/{symbol}', 'getData@getDataCoin');
+
+//Requête One Chart Coin
+Route::get('getCharts/{symbol}', 'getData@getChartsDailyCoin');

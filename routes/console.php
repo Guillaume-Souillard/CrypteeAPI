@@ -116,7 +116,6 @@ Artisan::command('updateChartsDaily', function () {
             if ($data['close'] != 0) {
                 DB::table('charts_data')->insert([
                     [
-                        'rank' => $file['rank'],
                         'symbol' => $file['symbol'],
                         'time' => $data['time'],
                         'price' => $data['close']
