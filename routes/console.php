@@ -126,3 +126,20 @@ Artisan::command('updateChartsDaily', function () {
     }
     echo'All Charts Daily updated !';
 });
+
+Artisan::command('updateDeltaCurrency', function() {
+
+    $file = file_get_contents("http://data.fixer.io/api/latest?access_key=eb3f3718fdc104b0a41dc7fe57336f0b",false);
+    $files = json_decode($file, true);
+    $USDtoEUR = 1 / $files['rates']['USD'];
+
+    DB::table('currency_delta')
+        ->where('currency', 'USDtoEUR')
+        ->update(
+            [
+                'value' => round($USDtoEUR, 6)
+            ]
+        );
+
+
+});

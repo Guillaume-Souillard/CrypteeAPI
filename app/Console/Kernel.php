@@ -26,6 +26,7 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('updateAllCoins')->everyFiveMinutes();
         $schedule->command('updateChartsDaily')->daily();
+        $schedule->command('updateDeltaCurrency')->hourly();
 
     }
 
