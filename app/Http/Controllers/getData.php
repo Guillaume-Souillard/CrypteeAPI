@@ -22,7 +22,8 @@ class getData extends Controller
             'percent_change_24h',
             'percent_change_7d',
             'cmc_price_btc',
-            'cmc_price_usd'
+            'cmc_price_usd',
+            'cmc_price_eur'
         )->get();
 
         $data = json_encode($datas, JSON_UNESCAPED_SLASHES);
@@ -46,7 +47,8 @@ class getData extends Controller
                 'percent_change_24h',
                 'percent_change_7d',
                 'cmc_price_btc',
-                'cmc_price_usd'
+                'cmc_price_usd',
+                'cmc_price_eur'
             )
             ->where('symbol', '=', $symbol)
             ->get();
