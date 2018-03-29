@@ -75,6 +75,10 @@ Artisan::command('initTable', function() {
  * @return void
  */
 Artisan::command('updateAllCoins', function () {
+
+    //Get Delta for EUR conversion
+    $deltaUSDtoEUR = DB::select("SELECT value FROM currency_delta WHERE currency = 'USDtoEUR'");
+
     //Get Data
     $files = getData('100');
 
@@ -92,7 +96,8 @@ Artisan::command('updateAllCoins', function () {
                     'percent_change_24h' => $file['percent_change_24h'],
                     'percent_change_7d' => $file['percent_change_7d'],
                     'cmc_price_btc' => $file['cmc_price_btc'],
-                    'cmc_price_usd' => $file['cmc_price_usd']
+                    'cmc_price_usd' => $file['cmc_price_usd'],
+                    'cmc_price_eur' => (float)$file['cmc_price_usd'] * $deltaUSDtoEUR[0]->value
                 ]
             );
     }
