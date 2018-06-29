@@ -15,21 +15,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Récupére tous les coins.
-Route::get('allcoins', function() {
-    return 'requête des allcoins';
-});
-
-//Requête pour le login.
-Route::get('login', function() {
-    return 'Requete log';
-});
-
-//Requête pour le register.
-Route::get('register', function() {
-    return 'Requete register';
-});
-
 //Requête pour le cronjob.
 Route::get('cronjobinit/{key}', 'Cronjob@initTable');
 
@@ -38,3 +23,6 @@ Route::get('getalldata', 'getData@getAll');
 
 //Requête One Coin
 Route::get('getdata/{symbol}', 'getData@getDataCoin');
+
+//Requête One Chart Coin
+Route::get('getCharts/{symbol}', 'getData@getChartsDailyCoin');
